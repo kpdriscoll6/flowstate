@@ -1,0 +1,30 @@
+Current NWM parameter files
+---------------------------
+ * Applies to NWM v1.2, starting 2018-03-06.
+ * This file list and description also applies to previous versions of the
+   NWM, but file contents may differ between versions.
+
+* Fulldom_hires_netcdf_1km.nc.gz
+File description:  This file contains gridded physiographic and model parameter
+data for the 'Long-range' configuration of the National Water Model.
+
+* Fulldom_hires_netcdf_250m.nc.gz
+File description:  This file contains gridded physiographic and model parameter
+data for the 'Analysis and Assimilation', 'Short Range' and 'Medium Range'
+configurations of the National Water Model.
+
+* RouteLink_NHDPLUS.nc.gz
+File description:  This file contains river channel definition and parameter
+data, and USGS stream gauge river reach definitions used in all configurations
+of the National Water Model.
+
+* spatialweights_1km_all_basins.nc.gz
+File description:  This file contains the spatial regridding weights, used to
+map variables from the 1km WRF-Hydro model grid to the NHDPlusv2 catchment
+objects used in the 'Long Range' configuration of the National Water Model.
+
+* spatialweights_250m_all_basins.nc.gz
+File description:  This file contains the spatial regridding weights, used to
+map variables from the 250m WRF-Hydro model grid to the NHDPlusv2 catchment
+objects used in the 'Analysis and Assimilation', 'Short Range' and 'Medium
+Range' configurations of the National Water Model.
