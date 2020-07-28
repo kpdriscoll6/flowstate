@@ -6,7 +6,11 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from difflib import SequenceMatcher
 
+
+def similarity(a, b):
+    return SequenceMatcher(None, a, b).ratio()
 
 # Getting the current work directory (cwd)
 directory = os.getcwd()
@@ -21,6 +25,8 @@ def loadReachIDs():
             if file.startswith("reach"):
                 filePath = os.path.join(root, file)
                 reachInfo = pd.read_csv(filePath)
+                #dropNA only want values that have names
+                reachInfo.dropna(inplace=True)
                 #print(reachInfo.head())
                 return(reachInfo)
     return
@@ -34,6 +40,7 @@ def loadRiverInfo():
                 filePath = os.path.join(root, file)
                 reachInfoSingle = pd.read_csv(filePath)
                 reachInfo = pd.concat([reachInfo,reachInfoSingle])
+    #don't know if I really want to do this but leaving it in for now to speed things up
     reachInfo.reset_index(inplace=True)          
     return(reachInfo)
 
@@ -46,7 +53,6 @@ def makeMatches():
     riverInfo = riverInfo[['Put In','RiverName','RunName']].values.tolist()
     #print(riverInfo[0])
     putInCoords = []
-    ##going about this all wrong. I NEED TO PRESORT BASED ON NAME SIMILARITY
     for info in riverInfo:
         try:
             coord = info[0]
@@ -63,28 +69,28 @@ def makeMatches():
         distance = 999999999
         i = 0
         #temporary code to test before
+        newReachName = ''
         for reachCoord in reachCoords:
             # p = putin r = reach
-            plat = putInCoord[0]
-            plon = putInCoord[1]
-            rlat = reachCoord[2]
-            rlon = reachCoord[3]
+            plat = float(putInCoord[0])
+            plon = float(putInCoord[1])
+            rlat = float(reachCoord[3])
+            rlon = float(reachCoord[4])
             featureID = reachCoord[1]
-            #print(str(plat)+' '+str(plon)+' '+str(lat)+' '+str(rlon))
+            river = putInCoord[2]
+            run = putInCoord[3]
+            #print('coords: '+str(plat)+' '+str(plon)+' '+str(rlat)+' '+str(rlon))
             #Distance formula
             newDistance = math.sqrt(math.pow(plat-rlat,2)+math.pow(plon-rlon,2))
-            if newDistance < distance:
+            #if the distance is less and the name similarity is greater than or equal --> replace
+            if newDistance < distance and similarity(reachCoord[5],river)>=similarity(newReachName,river):
                 distance = newDistance
-                river = putInCoord[2]
-                run = putInCoord[3]
-                match = [int(featureID),river,run]
-                #print(distance)
-        print(reachCoord[5])
-        print(riverInfo[1])
-        print(distance)
-        riverMatch.append(match)
-        #print(match)      
-    riverMatch = pd.DataFrame(riverMatch,columns = ['feature_id','river','run'])
+                #save the new reachName
+                newReachName = reachCoord[5]
+                match = [int(featureID),river,run,newReachName]
+        #print(match)
+        riverMatch.append(match)   
+    riverMatch = pd.DataFrame(riverMatch,columns = ['feature_id','river','run','riverNWM'])
     riverMatch.to_csv('riverMatches.csv')
 
 makeMatches()
