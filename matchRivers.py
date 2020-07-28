@@ -41,11 +41,12 @@ def makeMatches():
     reachInfo = loadReachIDs()
     reachCoords = reachInfo.values.tolist()
     riverInfo = loadRiverInfo()
-    #print(riverInfo.head())
-    #print(reachInfo.head())
+    print(riverInfo.head())
+    print(reachInfo.head())
     riverInfo = riverInfo[['Put In','RiverName','RunName']].values.tolist()
     #print(riverInfo[0])
     putInCoords = []
+    ##going about this all wrong. I NEED TO PRESORT BASED ON NAME SIMILARITY
     for info in riverInfo:
         try:
             coord = info[0]
@@ -70,7 +71,7 @@ def makeMatches():
             rlon = reachCoord[3]
             featureID = reachCoord[1]
             #print(str(plat)+' '+str(plon)+' '+str(lat)+' '+str(rlon))
-            #Distance formulat
+            #Distance formula
             newDistance = math.sqrt(math.pow(plat-rlat,2)+math.pow(plon-rlon,2))
             if newDistance < distance:
                 distance = newDistance
@@ -78,6 +79,9 @@ def makeMatches():
                 run = putInCoord[3]
                 match = [int(featureID),river,run]
                 #print(distance)
+        print(reachCoord[5])
+        print(riverInfo[1])
+        print(distance)
         riverMatch.append(match)
         #print(match)      
     riverMatch = pd.DataFrame(riverMatch,columns = ['feature_id','river','run'])
