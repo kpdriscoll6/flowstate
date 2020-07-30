@@ -26,7 +26,6 @@ def buildRiverTable():
 
     riverMatches = loadMatches()
     #run = riverMatches.iloc[0,3]
-
     #do some data cleaning here (drop NA) then add NA's to featureId
     riverInfo = loadRiverInfo()
     riverInfo.dropna(inplace=True)
@@ -42,7 +41,7 @@ def buildRiverTable():
 
     for riverMatch in tqdm(riverMatches):
         try:
-            #Wrap this in a try block because of unbalanced parantheses. Could probably fix this but I'm bad a regex
+            #Wrap this in a try block because of unbalanced parentheses. Could probably fix this but I'm bad a regex
             run = riverMatch[3]
             featureID = riverMatch[1]
             featureInsert = riverInfo[riverInfo['RunName'].str.match(run)]
@@ -56,5 +55,3 @@ def buildRiverTable():
     riverInfo.to_csv('riverInfoDB.csv')
     print(riverInfo.head())
 buildRiverTable()
-
-##MAJOR ISSUE CHATTOOGA WAS READING A TRIBUTARY AND NOT THE REAL RIVER...

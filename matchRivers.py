@@ -87,10 +87,10 @@ def makeMatches():
                 distance = newDistance
                 #save the new reachName
                 newReachName = reachCoord[5]
-                match = [int(featureID),river,run,newReachName]
+                match = [int(featureID),river,run,newReachName,distance]
         #print(match)
         riverMatch.append(match)   
-    riverMatch = pd.DataFrame(riverMatch,columns = ['feature_id','river','run','riverNWM'])
+    riverMatch = pd.DataFrame(riverMatch,columns = ['feature_id','river','run','riverNWM','distance'])
     riverMatch.to_csv('riverMatches.csv')
 
 makeMatches()
