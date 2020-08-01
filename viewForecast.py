@@ -26,9 +26,9 @@ for root, dirs, files in os.walk(directory):
             #reset the index so the feature ID becomes a column
             df.reset_index(inplace = True)
             #that feature ID is the poudre
-            flow = df.loc[df['feature_id'] == 2899363]
-            time =  df.loc[df['feature_id'] == 2899363].time.values[0]
-            referenceTime = df.loc[df['feature_id'] == 2899363].reference_time.values[0]
+            flow = df.loc[df['feature_id'] == 6269342]
+            time =  df.loc[df['feature_id'] == 6269342].time.values[0]
+            referenceTime = df.loc[df['feature_id'] == 6269342].reference_time.values[0]
             #print(float(test.streamflow)) #M^3/SEC
             riverLevels.append(float(flow.streamflow*35.31485))
             print(float(flow.streamflow*35.31485))
@@ -43,3 +43,4 @@ df=pd.DataFrame({'x': range(1,len(riverLevels)+1), 'y': riverLevels })
 # plot
 plt.plot( 'x', 'y', data=df, linestyle='-', marker='o')
 plt.show()
+6269342
