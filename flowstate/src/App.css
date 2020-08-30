@@ -1,0 +1,40 @@
+.App {
+  text-align: center;
+  background-color: #F5F5F5;
+}
+
+.App-link {
+  color: #000000;
+}
+
+
+ .navbar{
+  background-color: white;
+  padding: 20px;
+  margin: 0;
+}
+
+.nav-link{
+  padding: 5px;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.jumbotron {
+  background-color: #004e89;
+  padding: 5px;
+  margin: 0;
+}
+
+.footer {
+  background-color: #282c34;
+  padding: 20px;
+  color: 	#D3D3D3;
+}
+.footer-button {
+  color: 	#D3D3D3;
+}
+
+
+
+
