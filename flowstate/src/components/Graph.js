@@ -20,22 +20,19 @@ class BuildGraph extends React.Component {
       };
     }
 
-    //https://nwmdata.nohrsc.noaa.gov/latest/forecasts/medium_range/streamflow?station_id=6269188
-
     componentDidMount() {
       fetch("https://nwmdata.nohrsc.noaa.gov/latest/forecasts/medium_range/streamflow?station_id=6269188")
         .then(res => res.json()
         )
         .then(
           (result) => {
-            console.log(result)
+            //console.log(result)
             this.setState({
               isLoaded: true,
               data: result[0].data
             }
             );
-            console.log(this.state.data)
-            console.log(this.state.isLoaded)
+            //console.log(this.state.data)
           },
           (error) => {
             this.setState({
@@ -47,7 +44,11 @@ class BuildGraph extends React.Component {
     }
     render() {
       //this.parseData()
-      console.log(this.state.items)
+      const data= this.state.data
+      const graphVals = []
+      //Divide by 8 to achieve days in future for now (3 hours increments)
+      data.map((datum,index) => graphVals.push({x:index/8,y:datum.value}))
+      console.log(graphVals)
       return (
         <Col className="md-6">
         <Card className="m-5">
@@ -69,13 +70,7 @@ class BuildGraph extends React.Component {
               data: { stroke: "#c43a31" },
               parent: { border: "1px solid #ccc"}
             }}
-            data={[
-              { x: 1, y: 2 },
-              { x: 2, y: 3 },
-              { x: 3, y: 5 },
-              { x: 4, y: 4 },
-              { x: 5, y: 7 }
-            ]}
+            data={graphVals}
           />
         </VictoryChart>
         </CardBody>
