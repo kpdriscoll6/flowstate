@@ -43,11 +43,9 @@ class BuildGraph extends React.Component {
         )
     }
     render() {
-      //this.parseData()
-      const data= this.state.data
       const graphVals = []
       //Divide by 8 to achieve days in future for now (3 hours increments)
-      data.map((datum,index) => graphVals.push({x:index/8,y:datum.value}))
+      this.state.data.map((datum,index) => graphVals.push({x:index/8,y:datum.value}))
       console.log(graphVals)
       return (
         <Col className="md-6">
@@ -60,7 +58,8 @@ class BuildGraph extends React.Component {
           theme={VictoryTheme.material}
           containerComponent={
             <VictoryVoronoiContainer
-              labels={({ datum }) => `${Math.round(datum.x, 2)}, ${Math.round(datum.y, 2)}`}
+            //NO LABELS FOR NOW
+              //labels={({ datum }) => `${Math.round(datum.x, 2)}, ${Math.round(datum.y, 2)}`}
             />
           }
         >
@@ -95,18 +94,3 @@ function Graph(props){
 
 
  export default Graph;
-
-     {/*
-    parseData(riverData){
-      let data =  this.state.riverData.data.map(buildInput)
-    function buildInput(datum){
-      //console.log(datum.value)
-      //console.log(datum['forecast-time'])
-      //console.log(Object.keys(datum))
-      return({x:datum['forecast-time'],y:datum.value})
-      }
-    this.setState({ riverData: data })  
-    }
-  */}
-
-
