@@ -1,11 +1,11 @@
 import React from "react";
-import Graph from "./Graph";
+import RiverCard from "./RiverCard";
 
 
 function Home(props) {
     return (
         <React.Fragment>
-                <Graph/>
+                <RiverCard/>
         </React.Fragment>
     )
 }

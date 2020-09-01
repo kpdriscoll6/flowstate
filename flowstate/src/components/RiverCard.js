@@ -6,8 +6,17 @@ import {
   Card,
   CardBody,
   CardTitle,
-  Container
+  Container,
+  CardText,
+  Table,
     } from "reactstrap";
+import riverInfo from '../assets/riverInfo';
+
+const featureID = '6478281'
+//riverInfo.map(river =>console.log(river.RiverName))
+console.log(riverInfo.filter(river => river.featureID==featureID))
+
+
 
 class BuildGraph extends React.Component {
   constructor(props) {
@@ -16,12 +25,10 @@ class BuildGraph extends React.Component {
       riverData:[],
       error: null,
       isLoaded: false,
-      data: [1,2,3,4],
       };
     }
-
     componentDidMount() {
-      fetch("https://nwmdata.nohrsc.noaa.gov/latest/forecasts/medium_range/streamflow?station_id=6269188")
+      fetch(`https://nwmdata.nohrsc.noaa.gov/latest/forecasts/medium_range/streamflow?station_id=${featureID}`)
         .then(res => res.json()
         )
         .then(
@@ -29,7 +36,7 @@ class BuildGraph extends React.Component {
             //console.log(result)
             this.setState({
               isLoaded: true,
-              data: result[0].data
+              riverData: result[0].data
             }
             );
             //console.log(this.state.data)
@@ -45,13 +52,13 @@ class BuildGraph extends React.Component {
     render() {
       const graphVals = []
       //Divide by 8 to achieve days in future for now (3 hours increments)
-      this.state.data.map((datum,index) => graphVals.push({x:index/8,y:datum.value}))
-      console.log(graphVals)
+      this.state.riverData.map((datum,index) => graphVals.push({x:index/8,y:datum.value}))
+      //console.log(graphVals)
       return (
         <Col className="md-6">
         <Card className="m-5">
         <CardTitle className= "mt-5 mb-0">
-          <h5>Chattooga</h5>
+          <h2>{riverInfo.filter(river => river.featureID==featureID)[0].RiverName}</h2>
         </CardTitle>
         <CardBody>
         <VictoryChart
@@ -72,6 +79,26 @@ class BuildGraph extends React.Component {
             data={graphVals}
           />
         </VictoryChart>
+        <Table>
+          <thead>
+            <tr>
+              <th>River Name</th>
+              <th>Run Name</th>
+              <th>Class</th>
+              <th>Put In</th>
+              <th>Take Out</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{riverInfo.filter(river => river.featureID==featureID)[0].RiverName}</td>
+              <td>{riverInfo.filter(river => river.featureID==featureID)[0].RunName}</td>
+              <td>{riverInfo.filter(river => river.featureID==featureID)[0].Class}</td>
+              <td>{riverInfo.filter(river => river.featureID==featureID)[0]['Put In']}</td>
+              <td>{riverInfo.filter(river => river.featureID==featureID)[0]['Take Out']}</td>
+            </tr>
+          </tbody>
+        </Table>
         </CardBody>
         </Card>
         </Col>
@@ -80,7 +107,7 @@ class BuildGraph extends React.Component {
   }
 
 
-function Graph(props){
+function RiverCard(props){
   return (
     <React.Fragment>
     <Container>
@@ -93,4 +120,4 @@ function Graph(props){
 }
 
 
- export default Graph;
+ export default RiverCard;
