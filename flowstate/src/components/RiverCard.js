@@ -10,7 +10,7 @@ import {
     } from "reactstrap";
 import riverInfo from '../assets/riverInfo';
 
-const featureIDs = ['6478281','23017922','2040709','2040853']
+const featureIDs = ['6478281','6269342','2040709','2040853']
 
 
 
@@ -50,13 +50,12 @@ class BuildGraph extends React.Component {
       )
     }
     render() {
-      if (this.state.riverData.length===0) {
+      if (!this.state.riverData[this.props.index]) {
         return <div />
       }
       const graphVals = []
-      //THIS ONLY REALLY LOADS THE FIRST ITEM (SOMEHOW NEED TO MAKE IT SO THAT IT RENDERS ALL?)
       //Divide by 8 to achieve days in future for now (3 hours increments)
-      this.state.riverData[0].map((datum,index) => graphVals.push({x:index/8,y:datum.value}))
+      this.state.riverData[this.props.index].map((datum,index) => graphVals.push({x:index/8,y:datum.value}))
       //console.log(this.state.riverData[0])
       //NEED TO RETURN A GOOGLE MAPS LINK INSTEAD
       //console.log(riverInfo.filter(river => river.featureID==this.props.featureID)[0]['Put In'].split(',')[0])
