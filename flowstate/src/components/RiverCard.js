@@ -6,15 +6,12 @@ import {
   Card,
   CardBody,
   CardTitle,
-  Container,
-  CardText,
   Table,
     } from "reactstrap";
 import riverInfo from '../assets/riverInfo';
 
-const featureID = '6478281'
-//riverInfo.map(river =>console.log(river.RiverName))
-console.log(riverInfo.filter(river => river.featureID==featureID))
+const featureIDs = ['6478281','23017922','2040709','2040853']
+
 
 
 
@@ -28,6 +25,7 @@ class BuildGraph extends React.Component {
       };
     }
     componentDidMount() {
+      featureIDs.map(featureID => {
       fetch(`https://nwmdata.nohrsc.noaa.gov/latest/forecasts/medium_range/streamflow?station_id=${featureID}`)
         .then(res => res.json()
         )
@@ -36,7 +34,7 @@ class BuildGraph extends React.Component {
             //console.log(result)
             this.setState({
               isLoaded: true,
-              riverData: result[0].data
+              riverData: [...this.state.riverData,result[0].data]
             }
             );
             //console.log(this.state.data)
@@ -48,19 +46,30 @@ class BuildGraph extends React.Component {
             });
           }
         )
+      }
+      )
     }
     render() {
+      if (this.state.riverData.length===0) {
+        return <div />
+      }
       const graphVals = []
+      //THIS ONLY REALLY LOADS THE FIRST ITEM (SOMEHOW NEED TO MAKE IT SO THAT IT RENDERS ALL?)
       //Divide by 8 to achieve days in future for now (3 hours increments)
-      this.state.riverData.map((datum,index) => graphVals.push({x:index/8,y:datum.value}))
-      //console.log(graphVals)
+      this.state.riverData[0].map((datum,index) => graphVals.push({x:index/8,y:datum.value}))
+      //console.log(this.state.riverData[0])
+      //NEED TO RETURN A GOOGLE MAPS LINK INSTEAD
+      //console.log(riverInfo.filter(river => river.featureID==this.props.featureID)[0]['Put In'].split(',')[0])
       return (
-        <Col className="md-6">
-        <Card className="m-5">
+        <Col lg="6">
+        <Card className="m-2">
         <CardTitle className= "mt-5 mb-0">
-          <h2>{riverInfo.filter(river => river.featureID==featureID)[0].RiverName}</h2>
+          <h2>{riverInfo.filter(river => river.featureID==this.props.featureID)[0].RiverName}</h2>
+          <strong>{riverInfo.filter(river => river.featureID==this.props.featureID)[0].RunName}</strong>
         </CardTitle>
         <CardBody>
+        <Row>
+        <Col xs="8">
         <VictoryChart
           theme={VictoryTheme.material}
           containerComponent={
@@ -79,11 +88,11 @@ class BuildGraph extends React.Component {
             data={graphVals}
           />
         </VictoryChart>
-        <Table>
+        </Col>
+        </Row>
+        <Table responsive>
           <thead>
             <tr>
-              <th>River Name</th>
-              <th>Run Name</th>
               <th>Class</th>
               <th>Put In</th>
               <th>Take Out</th>
@@ -91,11 +100,9 @@ class BuildGraph extends React.Component {
           </thead>
           <tbody>
             <tr>
-              <td>{riverInfo.filter(river => river.featureID==featureID)[0].RiverName}</td>
-              <td>{riverInfo.filter(river => river.featureID==featureID)[0].RunName}</td>
-              <td>{riverInfo.filter(river => river.featureID==featureID)[0].Class}</td>
-              <td>{riverInfo.filter(river => river.featureID==featureID)[0]['Put In']}</td>
-              <td>{riverInfo.filter(river => river.featureID==featureID)[0]['Take Out']}</td>
+              <td>{riverInfo.filter(river => river.featureID==this.props.featureID)[0].Class}</td>
+              <td>{riverInfo.filter(river => river.featureID==this.props.featureID)[0]['Put In']}</td>
+              <td>{riverInfo.filter(river => river.featureID==this.props.featureID)[0]['Take Out']}</td>
             </tr>
           </tbody>
         </Table>
@@ -110,11 +117,14 @@ class BuildGraph extends React.Component {
 function RiverCard(props){
   return (
     <React.Fragment>
-    <Container>
         <Row>
-            <BuildGraph/>
+          {
+            featureIDs.map((featureID,index) => { return(
+            <BuildGraph featureID={featureID} index={index}/>)
+            }
+            )
+          }
         </Row>
-    </Container>
 </React.Fragment>
   )
 }
