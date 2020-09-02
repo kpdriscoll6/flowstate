@@ -35,7 +35,7 @@ class BuildGraph extends React.Component {
             //console.log(result)
             this.setState({
               isLoaded: true,
-              riverData: result[0].data
+              riverData: [...this.state.riverData,result[0].data]
             }
             );
             //console.log(this.state.data)
@@ -51,15 +51,13 @@ class BuildGraph extends React.Component {
       )
     }
     render() {
-      if (!this.state.riverData) {
+      if (!this.state.riverData[this.props.index]) {
         return <div />
       }
       if (this.props.featureID){
-        let graphVals = []
-        console.log(graphVals)
-        // THIS ISN'T WORKING RIGHT (GRAPH VALUES ARE NOTE UPDATING)
+        const graphVals = []
         //Divide by 8 to achieve days in future for now (3 hours increments)
-        this.state.riverData.map((datum,index) => graphVals.push({x:index/8,y:datum.value}))
+        this.state.riverData[this.props.index].map((datum,index) => graphVals.push({x:index/8,y:datum.value}))
         //console.log(this.state.riverData[0])
         //NEED TO RETURN A GOOGLE MAPS LINK INSTEAD
         //console.log(riverInfo.filter(river => river.featureID==this.props.featureID)[0]['Put In'].split(',')[0])
@@ -73,7 +71,6 @@ class BuildGraph extends React.Component {
           <CardBody>
           <Row>
           <Col xs="8">
-          {console.log(graphVals)}
           <VictoryChart
             theme={VictoryTheme.material}
             containerComponent={
@@ -133,6 +130,23 @@ function RiverCard({selection}){
 </React.Fragment>
   )
 }
+
+function RiverCards(){
+  return (
+    <React.Fragment>
+        <Row>
+          {
+            featureIDs.map((featureID,index) => { return(
+            <BuildGraph featureID={featureID} index={index}/>)
+            }
+            )
+          }
+        </Row>
+</React.Fragment>
+  )
+}
+
+
 
  export default RiverCard;
 
