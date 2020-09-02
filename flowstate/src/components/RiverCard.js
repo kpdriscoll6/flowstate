@@ -26,8 +26,7 @@ class BuildGraph extends React.Component {
       };
     }
     componentDidMount() {
-      featureIDs.map(featureID => {
-      fetch(`https://nwmdata.nohrsc.noaa.gov/latest/forecasts/medium_range/streamflow?station_id=${featureID}`)
+      fetch(`https://nwmdata.nohrsc.noaa.gov/latest/forecasts/medium_range/streamflow?station_id=${this.props.featureID}`)
         .then(res => res.json()
         )
         .then(
@@ -48,8 +47,28 @@ class BuildGraph extends React.Component {
           }
         )
       }
-      )
-    }
+    componentDidUpdate() {
+      fetch(`https://nwmdata.nohrsc.noaa.gov/latest/forecasts/medium_range/streamflow?station_id=${this.props.featureID}`)
+        .then(res => res.json()
+        )
+        .then(
+          (result) => {
+            //console.log(result)
+            this.setState({
+              isLoaded: true,
+              riverData: result[0].data
+            }
+            );
+            //console.log(this.state.data)
+          },
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error
+            });
+          }
+        )
+      }
     render() {
       if (!this.state.riverData) {
         return <div />
@@ -123,15 +142,19 @@ class BuildGraph extends React.Component {
 
 
 function RiverCard({selection}){
-  const featureID = selection
+  if (selection){
   console.log(selection)
   return (
     <React.Fragment>
         <Row className="position-sticky">
-            <BuildGraph featureID={featureID} index={0}/>
+            <BuildGraph featureID={selection} index={0}/>
         </Row>
 </React.Fragment>
   )
+  }
+  else{
+    return <div/>
+  }
 }
 
  export default RiverCard;
